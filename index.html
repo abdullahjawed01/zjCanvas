@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>zjCanvas — Designs that make brands impossible to ignore.</title>
+<meta name="description" content="zjCanvas — brand identities, AI-generated creatives, social media campaigns, motion visuals and digital experiences.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="ambient" aria-hidden="true">
+  <div class="blob blob--a"></div>
+  <div class="blob blob--b"></div>
+  <div class="blob blob--c"></div>
+  <div class="noise"></div>
+</div>
+
+<header class="site-header">
+  <nav class="navbar" id="navbar">
+    <a href="#home" class="brand">
+      <img src="/public/logo.png" height="25" width="25" alt="zjCanvas logo" class="brand-logo">
+      <span class="brand-name">zj<span class="text-gradient">Canvas</span></span>
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="#home">Home</a>
+      <a href="#works">Works</a>
+      <a href="#skills">Skills</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <a href="#contact" class="btn btn--gradient btn--sm">Let's Talk</a>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+</header>
+
+<main>
+
+  <section id="home" class="hero">
+    <div class="hero-inner">
+      <div class="hero-copy">
+        <span class="badge">
+          <span class="badge-dot"></span>
+          Available for freelance projects
+        </span>
+        <h1 class="hero-title">
+          Designs that make brands <span class="text-gradient text-gradient--wide">impossible to ignore.</span>
+        </h1>
+        <p class="hero-text">
+          I craft stunning brand identities, AI-generated creatives, social media campaigns, motion visuals, and digital experiences that leave lasting impressions.
+        </p>
+        <div class="hero-actions">
+          <a href="#works" class="btn btn--gradient">View Works →</a>
+          <a href="#contact" class="btn btn--glass">Contact Me</a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat">
+            <div class="stat-num text-gradient">150+</div>
+            <div class="stat-label">Projects</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num text-gradient">60+</div>
+            <div class="stat-label">Clients</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num text-gradient">5+</div>
+            <div class="stat-label">Years Experience</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-visual" id="heroVisual">
+        <div class="portrait-stage">
+          <div class="ring-dashed"></div>
+          <div class="ring-conic"></div>
+          <div class="portrait-frame">
+            <div class="img-slot img-slot--circle" data-slot="hero-portrait">
+              <div class="portrait-flip">
+                <div class="portrait-face portrait-face--front">
+                  <img src="/public/zainab.png" alt="Portrait of Zainab Jawed" class="portrait-img">
+                </div>
+                <div class="portrait-face portrait-face--back">
+                  <img src="/public/logo.png" alt="zjCanvas logo" class="portrait-logo">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="chip chip--float" style="top:-6px;left:-46px;">Fg</div>
+          <div class="chip chip--float2" style="top:60px;right:-56px;">Ps</div>
+          <div class="chip chip--float" style="bottom:30px;left:-60px;animation-delay:.5s;">Canva</div>
+          <div class="chip chip--float2" style="bottom:-10px;right:-30px;animation-delay:1s;">✦ AI</div>
+          <div class="chip chip--float" style="top:170px;left:-72px;animation-delay:1.5s;">Claude</div>
+          <div class="chip chip--float2" style="top:150px;right:-68px;animation-delay:.8s;">Gemini</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="works" class="work">
+    <div class="section-head">
+      <span class="eyebrow">Selected Works</span>
+      <h2>A collection worth scrolling through.</h2>
+      <p>A collection of AI-powered creatives, branding projects, posters and visual designs.</p>
+    </div>
+    <div id="workRows"></div>
+  </section>
+
+  <section id="skills" class="skills">
+    <div class="section-head section-head--center">
+      <span class="eyebrow">Toolkit</span>
+      <h2>Tools I Use</h2>
+    </div>
+    <div class="marquee-mask">
+      <div class="marquee-track" id="toolsTrack"></div>
+    </div>
+  </section>
+
+  <section id="contact" class="contact">
+    <div class="contact-card">
+      <div class="contact-info">
+        <h2>Let's Create Something <span class="text-gradient">Amazing.</span></h2>
+        <p>Have a project, a reel, or an idea worth designing? Drop a message and let's create something memorable.</p>
+        <div class="availability">
+          <span class="availability-dot"></span> Available for new projects
+        </div>
+        <div class="contact-links">
+          <a href="mailto:hello@zjcanvas.com" class="contact-email">hello@zjcanvas.com</a>
+          <span class="contact-location">Based in — Available worldwide</span>
+        </div>
+        <div class="socials">
+          <a href="#" class="social-pill">Instagram</a>
+          <a href="#" class="social-pill">LinkedIn</a>
+          <a href="#" class="social-pill">WhatsApp</a>
+        </div>
+      </div>
+
+      <form class="contact-form" id="contactForm">
+        <div class="form-row">
+          <label class="field">
+            <span>Your name</span>
+            <input type="text" name="name" placeholder="Jane Doe" required>
+          </label>
+          <label class="field">
+            <span>Email address</span>
+            <input type="email" name="email" placeholder="jane@example.com" required>
+          </label>
+        </div>
+        <div class="form-row">
+          <label class="field">
+            <span>Project type</span>
+            <select name="projectType">
+              <option value="" disabled selected>Choose one</option>
+              <option value="brand">Brand identity</option>
+              <option value="reel">AI reel / motion</option>
+              <option value="poster">Poster / print</option>
+              <option value="social">Social campaign</option>
+              <option value="other">Other</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Budget</span>
+            <select name="budget">
+              <option value="" disabled selected>Choose a range</option>
+              <option value="lt1k">Under $1k</option>
+              <option value="1-5k">$1k – $5k</option>
+              <option value="5-15k">$5k – $15k</option>
+              <option value="15k+">$15k+</option>
+            </select>
+          </label>
+        </div>
+        <label class="field">
+          <span>Tell me about your project</span>
+          <textarea name="message" rows="4" placeholder="Share a few details…"></textarea>
+        </label>
+        <button type="submit" class="btn btn--gradient btn--submit" id="submitBtn">Send Message</button>
+      </form>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <a href="#home" class="footer-wordmark">zjCanvas</a>
+  <nav class="footer-links">
+    <a href="#home">Home</a>
+    <a href="#works">Works</a>
+    <a href="#skills">Skills</a>
+    <a href="#contact">Contact</a>
+  </nav>
+  <div class="footer-socials">
+    <a href="#" aria-label="Instagram">IG</a>
+    <a href="#" aria-label="LinkedIn">IN</a>
+    <a href="#" aria-label="WhatsApp">WA</a>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Zainab Jawed — zjCanvas</span>
+    <span>Made with ❤️ in motion</span>
+    <a href="#home">Back to top ↑</a>
+  </div>
+</footer>
+
+<script src="data.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
