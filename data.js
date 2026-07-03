@@ -123,6 +123,9 @@ function setupLazyVideo(mediaEl, src) {
   mediaEl.loop = true;
   mediaEl.playsInline = true;
   mediaEl.preload = 'none';
+  // Show a still frame right away instead of a blank card while the
+  // video itself waits for the lazy IntersectionObserver to kick in.
+  mediaEl.poster = src.replace(/\/([^/]+)\.[^./]+$/, '/posters/$1.jpg');
   lazyVideoObserver.observe(mediaEl);
 }
 
