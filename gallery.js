@@ -5,12 +5,7 @@ function buildMediaCard(item, variant) {
   const video = isVideoPath(item.src);
   const mediaEl = document.createElement(video ? 'video' : 'img');
   if (video) {
-    mediaEl.src = item.src;
-    mediaEl.muted = true;
-    mediaEl.loop = true;
-    mediaEl.autoplay = true;
-    mediaEl.playsInline = true;
-    mediaEl.preload = 'metadata';
+    setupLazyVideo(mediaEl, item.src);
   } else {
     mediaEl.src = item.src;
     mediaEl.alt = item.label;

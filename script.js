@@ -37,12 +37,7 @@ function buildWorkRows() {
 
         const mediaEl = document.createElement(isVideoPath(item.src) ? 'video' : 'img');
         if (mediaEl.tagName === 'VIDEO') {
-          mediaEl.src = item.src;
-          mediaEl.muted = true;
-          mediaEl.loop = true;
-          mediaEl.autoplay = true;
-          mediaEl.playsInline = true;
-          mediaEl.preload = 'metadata';
+          setupLazyVideo(mediaEl, item.src);
         } else {
           mediaEl.src = item.src;
           mediaEl.alt = item.label;

@@ -2,57 +2,52 @@
 // and the "view all" gallery pages (gallery.js).
 
 const LOGO_ITEMS = [
-  { src: 'public/logos/logo-01.png', label: 'Enlightened' },
-  { src: 'public/logos/logo-02.png', label: 'Itz Review Time' },
-  { src: 'public/logos/logo-03.png', label: 'Untitled Design' },
-  { src: 'public/logos/logo-04.png', label: 'Abstract Green Healthy Life' },
-  { src: 'public/logos/logo-05.png', label: 'Ismail Multispeciality Clinic' },
-  { src: 'public/logos/logo-06.png', label: 'Ismail Multi-Speciality Clinic' },
+  { src: 'public/logos/logo-01.jpg', label: 'Enlightened' },
+  { src: 'public/logos/logo-02.jpg', label: 'Itz Review Time' },
+  { src: 'public/logos/logo-03.jpg', label: 'Untitled Design' },
+  { src: 'public/logos/logo-04.jpg', label: 'Abstract Green Healthy Life' },
+  { src: 'public/logos/logo-05.jpg', label: 'Ismail Multispeciality Clinic' },
+  { src: 'public/logos/logo-06.jpg', label: 'Ismail Multi-Speciality Clinic' },
 ];
 
 const POSTER_ITEMS = [
-  { src: 'public/posters/poster-01.png', label: 'Zainab Work 01' },
-  { src: 'public/posters/poster-02.png', label: 'Zainab Work 02' },
-  { src: 'public/posters/poster-03.png', label: 'Trustin — Poster 27' },
-  { src: 'public/posters/poster-04.png', label: 'Trustin — Poster 22' },
-  { src: 'public/posters/poster-05.png', label: 'Trustin — Poster 26' },
-  { src: 'public/posters/poster-06.png', label: 'Your Word Shapes Your Kids’ World' },
-  { src: 'public/posters/poster-07.png', label: 'Trustin — Poster 23' },
-  { src: 'public/posters/poster-08.png', label: 'Zainab Work 03' },
-  { src: 'public/posters/poster-09.png', label: 'Parenting Workshop' },
-  { src: 'public/posters/poster-10.png', label: 'Wisdom of Words' },
-  { src: 'public/posters/poster-11.png', label: 'Dawrah Qur’an' },
-  { src: 'public/posters/poster-12.png', label: 'An Noor Islamic Academy' },
-  { src: 'public/posters/poster-13.png', label: 'Trustin — Poster 25' },
-  { src: 'public/posters/poster-14.png', label: 'Chocolate Workshop' },
-  { src: 'public/posters/poster-15.png', label: 'My Mental Health, My Responsibility' },
-  { src: 'public/posters/poster-16.png', label: 'Just Do It — Nike' },
-  { src: 'public/posters/poster-17.png', label: 'This Is Why Your Neck Hurts — OrthoCare' },
-  { src: 'public/posters/poster-18.png', label: 'Support to Strength — OrthoCare' },
-  { src: 'public/posters/poster-19.png', label: 'Why Doctors Choose First Clinic' },
-  { src: 'public/posters/poster-20.png', label: 'Start Your Clinic in 7 Days — First Clinic' },
-  { src: 'public/posters/poster-21.png', label: 'Discover a Healthier You — First Clinic' },
-  { src: 'public/posters/poster-22.png', label: 'Is Your Knee on Pause? — OrthoCare' },
-  { src: 'public/posters/poster-23.png', label: 'OrthoCare, Bengaluru' },
-  { src: 'public/posters/poster-24.png', label: 'Time for Qurbani — Adam’s Fresh Meat' },
-  { src: 'public/posters/poster-25.png', label: 'Don’t Let Injury Stop Your Game — OrthoCare' },
-  { src: 'public/posters/poster-26.png', label: 'Fresh Seafood, Pure Taste — Adam’s Fresh Meat' },
-  { src: 'public/posters/poster-27.png', label: 'Wisdom of Words — Part 02' },
+  { src: 'public/posters/poster-01.jpg', label: 'Zainab Work 01' },
+  { src: 'public/posters/poster-02.jpg', label: 'Zainab Work 02' },
+  { src: 'public/posters/poster-03.jpg', label: 'Trustin — Poster 27' },
+  { src: 'public/posters/poster-04.jpg', label: 'Trustin — Poster 22' },
+  { src: 'public/posters/poster-05.jpg', label: 'Trustin — Poster 26' },
+  { src: 'public/posters/poster-06.jpg', label: 'Your Word Shapes Your Kids’ World' },
+  { src: 'public/posters/poster-07.jpg', label: 'Trustin — Poster 23' },
+  { src: 'public/posters/poster-08.jpg', label: 'Zainab Work 03' },
+  { src: 'public/posters/poster-09.jpg', label: 'Parenting Workshop' },
+  { src: 'public/posters/poster-10.jpg', label: 'Wisdom of Words' },
+  { src: 'public/posters/poster-11.jpg', label: 'Dawrah Qur’an' },
+  { src: 'public/posters/poster-12.jpg', label: 'An Noor Islamic Academy' },
+  { src: 'public/posters/poster-13.jpg', label: 'Trustin — Poster 25' },
+  { src: 'public/posters/poster-14.jpg', label: 'Chocolate Workshop' },
+  { src: 'public/posters/poster-15.jpg', label: 'My Mental Health, My Responsibility' },
+  { src: 'public/posters/poster-16.jpg', label: 'Just Do It — Nike' },
+  { src: 'public/posters/poster-17.jpg', label: 'This Is Why Your Neck Hurts — OrthoCare' },
+  { src: 'public/posters/poster-18.jpg', label: 'Support to Strength — OrthoCare' },
+  { src: 'public/posters/poster-19.jpg', label: 'Why Doctors Choose First Clinic' },
+  { src: 'public/posters/poster-20.jpg', label: 'Start Your Clinic in 7 Days — First Clinic' },
+  { src: 'public/posters/poster-21.jpg', label: 'Discover a Healthier You — First Clinic' },
+  { src: 'public/posters/poster-22.jpg', label: 'Is Your Knee on Pause? — OrthoCare' },
+  { src: 'public/posters/poster-23.jpg', label: 'OrthoCare, Bengaluru' },
+  { src: 'public/posters/poster-24.jpg', label: 'Time for Qurbani — Adam’s Fresh Meat' },
+  { src: 'public/posters/poster-25.jpg', label: 'Don’t Let Injury Stop Your Game — OrthoCare' },
+  { src: 'public/posters/poster-26.jpg', label: 'Fresh Seafood, Pure Taste — Adam’s Fresh Meat' },
+  { src: 'public/posters/poster-27.jpg', label: 'Wisdom of Words — Part 02' },
 ];
 
 const REEL_ITEMS = [
   { src: 'public/reels/reel-01.mp4', label: 'AI Reel 01' },
-  { src: 'public/reels/reel-02.mp4', label: 'Why Doctors Choose Licensing Consultants' },
   { src: 'public/reels/reel-03.mp4', label: 'AI Reel 03' },
   { src: 'public/reels/reel-04.mp4', label: 'AI Reel 04' },
   { src: 'public/reels/reel-05.mp4', label: 'AI Reel 05' },
-  { src: 'public/reels/reel-06.mp4', label: 'Here Is Exactly How TrustIn Works' },
   { src: 'public/reels/reel-07.mp4', label: 'Adam’s Fresh Meat — Heart of Quality' },
-  { src: 'public/reels/reel-08.mp4', label: 'TrustIn — Eid Greetings' },
-  { src: 'public/reels/reel-09.mp4', label: 'How Challenging Are the DHA Licensing Exams?' },
   { src: 'public/reels/reel-10.mp4', label: 'A Day in the Life of a Doctor in Dubai' },
   { src: 'public/reels/reel-11.mp4', label: 'Doctors, Thinking About Dubai?' },
-  { src: 'public/reels/reel-12.mp4', label: 'Same Shift, Different Story — TrustIn' },
   { src: 'public/reels/reel-13.mp4', label: 'A Day in the Life at TrustIn' },
 ];
 
@@ -66,23 +61,15 @@ const CAROUSEL_ITEMS = [
   },
   {
     label: 'From Eligibility to Practice',
-    images: [2, 3, 4].map((n) => `public/carousel/from-eligibility-to-practice/${n}.png`),
-  },
-  {
-    label: 'Week 2 of 6',
-    images: [1, 2, 3, 4, 5, 6, 7].map((n) => `public/carousel/week-2-of-6/${n}.png`),
+    images: [2, 3, 4].map((n) => `public/carousel/from-eligibility-to-practice/${n}.jpg`),
   },
   {
     label: 'Carousel Showcase',
-    images: [2, 3, 4, 5, 6, 7, 8].map((n) => `public/carousel/carousel-showcase/${n}.png`),
-  },
-  {
-    label: 'General Doctors Have 7 Documents — Surgeons Have 10',
-    images: [1, 2, 3, 4, 5].map((n) => `public/carousel/doctors-documents/${n}.png`),
+    images: [2, 3, 4, 5, 6, 7, 8].map((n) => `public/carousel/carousel-showcase/${n}.jpg`),
   },
   {
     label: 'Pink Gradients — Social Media & UX/UI Post',
-    images: [1, 2, 3, 4, 5, 6].map((n) => `public/carousel/pink-gradients/${n}.png`),
+    images: [1, 2, 3, 4, 5, 6].map((n) => `public/carousel/pink-gradients/${n}.jpg`),
   },
 ];
 
@@ -91,11 +78,11 @@ const CAROUSEL_ITEMS = [
 const BROCHURE_ITEMS = [
   {
     label: 'TrustIn Brochure',
-    images: ['public/brochures/trustin-brochure/1-outside.png', 'public/brochures/trustin-brochure/2-inside.png'],
+    images: ['public/brochures/trustin-brochure/1-outside.jpg', 'public/brochures/trustin-brochure/2-inside.jpg'],
   },
   {
     label: 'First Physio Brochure',
-    images: ['public/brochures/first-physio-brochure/1-outside.png', 'public/brochures/first-physio-brochure/2-inside.png'],
+    images: ['public/brochures/first-physio-brochure/1-outside.jpg', 'public/brochures/first-physio-brochure/2-inside.jpg'],
   },
 ];
 
@@ -111,6 +98,32 @@ function isImagePath(str) {
 
 function isVideoPath(str) {
   return /\.(mp4|webm|mov|m4v)$/i.test(str);
+}
+
+// Videos only get their `src` assigned (and start playing) once they scroll
+// near the viewport, and pause again once they scroll away. Without this,
+// every autoplaying <video> on the page — homepage marquees plus gallery
+// grids — would start downloading at once, which is what made the site so
+// heavy to load.
+const lazyVideoObserver = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    const el = entry.target;
+    if (entry.isIntersecting) {
+      if (!el.src) el.src = el.dataset.src;
+      el.play().catch(() => {});
+    } else {
+      el.pause();
+    }
+  });
+}, { rootMargin: '250px' });
+
+function setupLazyVideo(mediaEl, src) {
+  mediaEl.dataset.src = src;
+  mediaEl.muted = true;
+  mediaEl.loop = true;
+  mediaEl.playsInline = true;
+  mediaEl.preload = 'none';
+  lazyVideoObserver.observe(mediaEl);
 }
 
 function appendCarouselSlot(track, entry, label, basisPercent) {
