@@ -296,7 +296,6 @@ h1, h2, h3 {
 
 .work-track-mask { overflow: hidden; padding: 6px 0 20px; }
 .work-track { display: flex; gap: 22px; width: max-content; padding-left: 6vw; will-change: transform; }
-.work-track--tight { gap: 6px; }
 .work-track--carousel { gap: 20px; }
 
 .work-card {
@@ -333,8 +332,19 @@ h1, h2, h3 {
 }
 .carousel-item:hover { transform: translateY(-8px); }
 
-.carousel-item--large { flex-basis: clamp(320px, 47vw, 620px); height: 370px; }
-.carousel-item--big { flex-basis: clamp(300px, 52vw, 460px); height: 380px; }
+.carousel-item--large { flex-basis: clamp(260px, 36vw, 440px); height: auto; aspect-ratio: 297 / 210; }
+.carousel-item--big { flex-basis: clamp(220px, 30vw, 300px); height: auto; aspect-ratio: 3 / 4; }
+
+.carousel-item--static { cursor: pointer; }
+.carousel-item--static img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.carousel-item-count {
+  position: absolute; right: 14px; top: 14px;
+  padding: 6px 14px; border-radius: 999px;
+  background: rgba(255,255,255,0.78); backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.6);
+  font-size: 12px; font-weight: 600; color: var(--text);
+}
 
 .carousel-item-images-mask { position: absolute; inset: 0; overflow: hidden; }
 .carousel-item-images-mask.has-edge-fade {
@@ -593,11 +603,11 @@ h1, h2, h3 {
 }
 .carousel-grid .carousel-item { height: 280px; }
 
-.carousel-grid--large { grid-template-columns: repeat(auto-fit, minmax(400px, 480px)); justify-content: center; }
-.carousel-grid--large .carousel-item { height: auto; aspect-ratio: 27.94 / 43.18; }
+.carousel-grid--large { grid-template-columns: repeat(auto-fit, minmax(340px, 480px)); justify-content: center; }
+.carousel-grid--large .carousel-item { height: auto; aspect-ratio: 297 / 210; }
 
-.carousel-grid--big { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; }
-.carousel-grid--big .carousel-item { height: auto; aspect-ratio: 4 / 5; }
+.carousel-grid--big { grid-template-columns: repeat(auto-fit, minmax(220px, 280px)); justify-content: center; gap: 20px; }
+.carousel-grid--big .carousel-item { height: auto; aspect-ratio: 3 / 4; }
 
 .lightbox {
   position: fixed; inset: 0; z-index: 300;
@@ -615,6 +625,30 @@ h1, h2, h3 {
   transition: background .25s;
 }
 .lightbox-close:hover { background: rgba(255,255,255,0.25); }
+
+.lightbox-arrow {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  width: 52px; height: 52px; border-radius: 50%;
+  background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.3); color: #fff;
+  font-size: 26px; display: flex; align-items: center; justify-content: center; cursor: pointer;
+  transition: background .25s;
+}
+.lightbox-arrow:hover { background: rgba(255,255,255,0.25); }
+.lightbox-arrow--prev { left: 20px; }
+.lightbox-arrow--next { right: 20px; }
+
+.lightbox-counter {
+  position: absolute; bottom: 26px; left: 50%; transform: translateX(-50%);
+  padding: 8px 18px; border-radius: 999px;
+  background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.3); color: #fff;
+  font-size: 13px; font-weight: 600;
+}
+
+@media (max-width: 620px) {
+  .lightbox-arrow { width: 42px; height: 42px; font-size: 20px; }
+  .lightbox-arrow--prev { left: 8px; }
+  .lightbox-arrow--next { right: 8px; }
+}
 
 /* ---------- responsive ---------- */
 

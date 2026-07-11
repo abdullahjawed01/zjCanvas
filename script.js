@@ -2,9 +2,29 @@ const WORK_ROWS = [
   { id: 'reels', label: 'AI Reels', link: 'Reels.html', linkLabel: 'View All Reels →', items: REEL_ITEMS, w: 230, h: 400, speed: 46 },
   { id: 'carousel', label: 'Carousel Designs', link: 'Carousel.html', linkLabel: 'View All Carousel Designs →', carouselItems: CAROUSEL_ITEMS, speed: 34 },
   { id: 'posters', label: 'Posters', link: 'Posters.html', linkLabel: 'View All Posters →', items: POSTER_ITEMS, w: 280, h: 373, speed: 40 },
-  { id: 'brochure', label: 'Brochures', link: 'Brochures.html', linkLabel: 'View All Brochures →', carouselItems: BROCHURE_ITEMS, speed: 34 },
+  { id: 'brochure', label: 'Brochures', link: 'Brochures.html', linkLabel: 'View All Brochures →', carouselItems: BROCHURE_ITEMS, speed: 16, imageDuration: 9 },
   { id: 'logos', label: 'Logos', link: 'Logos.html', linkLabel: 'View All Logos →', items: LOGO_ITEMS, w: 200, h: 200, speed: 50 },
 ];
+
+// Keeps appending copies of `items` (via `renderItem`) onto an already
+// in-document track until the strip is at least two screens wide. Rows with
+// only a handful of items (Carousel, Brochures) would otherwise render a
+// single set narrower than the viewport, so the infinite-scroll loop had
+// nothing to show once it wrapped — a visible blank gap mid-scroll. Returns
+// the width of one item-set, which initMarquee uses as its loop distance.
+function fillMarqueeTrack(track, items, renderItem) {
+  items.forEach((item) => track.appendChild(renderItem(item)));
+  const unitWidth = track.scrollWidth;
+  items.forEach((item) => track.appendChild(renderItem(item)));
+
+  const target = window.innerWidth * 2;
+  let total = unitWidth * 2;
+  while (total < target) {
+    items.forEach((item) => track.appendChild(renderItem(item)));
+    total += unitWidth;
+  }
+  return unitWidth;
+}
 
 function buildWorkRows() {
   const container = document.getElementById('workRows');
@@ -21,15 +41,18 @@ function buildWorkRows() {
     mask.className = 'work-track-mask';
     const track = document.createElement('div');
     track.className = 'work-track';
+    mask.appendChild(track);
+    section.appendChild(mask);
+    container.appendChild(section);
 
+    let unitWidth;
     if (row.carouselItems) {
       const cardClass = row.id === 'brochure' ? 'carousel-item--large' : 'carousel-item--big';
-      track.classList.add(row.id === 'brochure' ? 'work-track--tight' : 'work-track--carousel');
-      const doubled = [...row.carouselItems, ...row.carouselItems];
-      doubled.forEach((item) => track.appendChild(buildCarouselItemElement(item, cardClass)));
+      track.classList.add('work-track--carousel');
+      unitWidth = fillMarqueeTrack(track, row.carouselItems, (item) =>
+        buildCarouselItemElement(item, cardClass, row.imageDuration));
     } else {
-      const doubled = [...row.items, ...row.items];
-      doubled.forEach((item) => {
+      unitWidth = fillMarqueeTrack(track, row.items, (item) => {
         const card = document.createElement('div');
         card.className = 'work-card' + (row.id === 'logos' ? ' work-card--logos' : '');
         card.style.width = `clamp(140px, 42vw, ${row.w}px)`;
@@ -44,15 +67,11 @@ function buildWorkRows() {
           mediaEl.loading = 'lazy';
         }
         card.appendChild(mediaEl);
-        track.appendChild(card);
+        return card;
       });
     }
 
-    mask.appendChild(track);
-    section.appendChild(mask);
-    container.appendChild(section);
-
-    initMarquee(track, row.speed);
+    initMarquee(track, row.speed, unitWidth);
   });
 }
 
@@ -91,12 +110,10 @@ function buildToolsMarquee() {
   });
 }
 
-function initMarquee(track, speed) {
+function initMarquee(track, speed, width) {
   let hover = false;
   let current = 0;
-  let pos = 0;
-  let width = track.scrollWidth / 2;
-  pos = -width;
+  let pos = -width;
   track.style.transform = `translateX(${pos}px)`;
 
   track.parentElement.addEventListener('mouseenter', () => { hover = true; });

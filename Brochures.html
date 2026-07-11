@@ -42,7 +42,7 @@
   <section class="gallery-hero">
     <a href="index.html#works" class="pill-link">← Back to Works</a>
     <h1 class="gallery-title">Brochure <span class="text-gradient">Designs</span></h1>
-    <p class="gallery-sub">Each card is its own brochure component — every one can hold any number of pages that auto-float to the left on a loop.</p>
+    <p class="gallery-sub">Click a brochure to open it — use the arrows (or ← → keys) to move through its pages.</p>
   </section>
 
   <section>
@@ -70,11 +70,21 @@
   </div>
 </footer>
 
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightboxClose" aria-label="Close">✕</button>
+  <button class="lightbox-arrow lightbox-arrow--prev" id="lightboxPrev" aria-label="Previous page">‹</button>
+  <div class="lightbox-content" id="lightboxContent"></div>
+  <button class="lightbox-arrow lightbox-arrow--next" id="lightboxNext" aria-label="Next page">›</button>
+  <div class="lightbox-counter" id="lightboxCounter"></div>
+</div>
+
 <script src="data.js"></script>
 <script src="gallery.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', () => {
   buildCarouselGrid('brochureGrid', BROCHURE_ITEMS, 'carousel-item--large');
+  initLightbox();
+  initCarouselLightbox();
   initNavbar();
 });
 </script>

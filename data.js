@@ -172,7 +172,7 @@ function appendCarouselSlot(track, entry, label, basisPercent) {
 // and continuously through its images, each slide sized to exactly fill the
 // card (never cropped, never mixed with its neighbour) so one full image is
 // always in view while it glides seamlessly into the next, on an endless loop.
-function buildCarouselItemElement(item, extraClass) {
+function buildCarouselItemElement(item, extraClass, secondsPerImage = 5.5) {
   const slide = document.createElement('div');
   slide.className = 'carousel-item' + (extraClass ? ` ${extraClass}` : '');
 
@@ -191,7 +191,7 @@ function buildCarouselItemElement(item, extraClass) {
   if (canAnimate) {
     mask.classList.add('has-edge-fade');
     imgTrack.classList.add('is-scrolling');
-    imgTrack.style.animationDuration = `${item.images.length * 5.5}s`;
+    imgTrack.style.animationDuration = `${item.images.length * secondsPerImage}s`;
   }
 
   mask.appendChild(imgTrack);

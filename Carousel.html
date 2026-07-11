@@ -42,7 +42,7 @@
   <section class="gallery-hero">
     <a href="index.html#works" class="pill-link">← Back to Works</a>
     <h1 class="gallery-title">Carousel <span class="text-gradient">Designs</span></h1>
-    <p class="gallery-sub">Each card is its own carousel component — every one can hold any number of images that auto-float to the left on a loop.</p>
+    <p class="gallery-sub">Click a carousel to open it — use the arrows (or ← → keys) to move through its slides.</p>
   </section>
 
   <section>
@@ -70,11 +70,21 @@
   </div>
 </footer>
 
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightboxClose" aria-label="Close">✕</button>
+  <button class="lightbox-arrow lightbox-arrow--prev" id="lightboxPrev" aria-label="Previous slide">‹</button>
+  <div class="lightbox-content" id="lightboxContent"></div>
+  <button class="lightbox-arrow lightbox-arrow--next" id="lightboxNext" aria-label="Next slide">›</button>
+  <div class="lightbox-counter" id="lightboxCounter"></div>
+</div>
+
 <script src="data.js"></script>
 <script src="gallery.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', () => {
   buildCarouselGrid('carouselGrid', CAROUSEL_ITEMS, 'carousel-item--big');
+  initLightbox();
+  initCarouselLightbox();
   initNavbar();
 });
 </script>
