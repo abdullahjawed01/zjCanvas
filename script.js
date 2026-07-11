@@ -56,6 +56,30 @@ function buildWorkRows() {
   });
 }
 
+function buildTestimonials() {
+  const container = document.getElementById('testimonialsGrid');
+  TESTIMONIALS.forEach((t) => {
+    const card = document.createElement('div');
+    card.className = 'testimonial-card';
+
+    const logo = t.logo
+      ? `<img src="${t.logo}" alt="${t.company} logo" class="testimonial-logo">`
+      : `<div class="testimonial-logo testimonial-logo--initials">${t.initials}</div>`;
+
+    card.innerHTML = `
+      <div class="testimonial-head">
+        ${logo}
+        <div class="testimonial-company">
+          <div class="testimonial-company-name">${t.company}</div>
+          <div class="testimonial-person">${t.name}${t.role ? ` · ${t.role}` : ''}</div>
+        </div>
+      </div>
+      <p class="testimonial-text">“${t.text}”</p>
+    `;
+    container.appendChild(card);
+  });
+}
+
 function buildToolsMarquee() {
   const track = document.getElementById('toolsTrack');
   const doubled = [...TOOLS, ...TOOLS];
@@ -121,6 +145,7 @@ function initContactForm() {
 
 document.addEventListener('DOMContentLoaded', () => {
   buildWorkRows();
+  buildTestimonials();
   buildToolsMarquee();
   initNavbar();
   initHeroTilt();

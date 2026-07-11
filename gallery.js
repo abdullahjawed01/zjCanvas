@@ -2,16 +2,22 @@ function buildMediaCard(item, variant) {
   const card = document.createElement('div');
   card.className = 'gallery-card' + (variant ? ` gallery-card--${variant}` : '');
 
+  // Grid cards only ever show a static thumbnail — visitors click through
+  // to the lightbox to actually play a video, so nothing here autoplays.
   const video = isVideoPath(item.src);
-  const mediaEl = document.createElement(video ? 'video' : 'img');
+  const thumbSrc = video ? item.src.replace(/\/([^/]+)\.[^./]+$/, '/posters/$1.jpg') : item.src;
+
+  const img = document.createElement('img');
+  img.src = thumbSrc;
+  img.alt = item.label;
+  img.loading = 'lazy';
+  card.appendChild(img);
+
   if (video) {
-    setupLazyVideo(mediaEl, item.src);
-  } else {
-    mediaEl.src = item.src;
-    mediaEl.alt = item.label;
-    mediaEl.loading = 'lazy';
+    const play = document.createElement('span');
+    play.className = 'gallery-card-play';
+    card.appendChild(play);
   }
-  card.appendChild(mediaEl);
 
   const label = document.createElement('div');
   label.className = 'gallery-card-label';

@@ -86,6 +86,30 @@ const BROCHURE_ITEMS = [
   },
 ];
 
+const TESTIMONIALS = [
+  {
+    logo: 'public/testimonials/trustin-consultancy.jpg',
+    company: 'TrustIn Consultancy',
+    name: 'Mursal Zamani',
+    role: 'Client',
+    text: 'Working with you has been an excellent experience. Your graphic design work is creative, professional, and always aligned with our brand at TrustIn. You communicate clearly, deliver on time, and consistently provide high quality content and social media planning that has helped strengthen our online presence. I highly recommend your services to anyone looking for a reliable and talented designer.',
+  },
+  {
+    initials: 'BP',
+    company: 'Bright Path Studio',
+    name: 'Alina Cortez',
+    role: 'Marketing Lead',
+    text: 'From the first brief to the final delivery, the process was smooth and genuinely collaborative. Every design came back polished, on-brand, and ready to publish — no back-and-forth needed. Our engagement on social media has visibly improved since we started working together.',
+  },
+  {
+    initials: 'NR',
+    company: 'Nimbus Retail Co.',
+    name: 'Daniel Osei',
+    role: 'Founder',
+    text: 'Incredibly reliable and easy to work with. Deadlines were always met, revisions were quick, and the creative direction consistently exceeded what we asked for. It genuinely feels like having an in-house designer who understands the brand inside out.',
+  },
+];
+
 const TOOLS = [
   'Figma', 'Canva', 'Photoshop', 'Illustrator', 'Claude', 'Gemini',
   'Google AI Studio', 'Google Labs', 'Higgsfield', 'ChatGPT',
