@@ -90,7 +90,7 @@ const TESTIMONIALS = [
   {
     logo: 'public/testimonials/trustin-consultancy.jpg',
     company: 'TrustIn Consultancy',
-    name: 'Mursal Zamani',
+    name: 'Morsal Zamani',
     role: 'Client',
     text: 'Working with you has been an excellent experience. Your graphic design work is creative, professional, and always aligned with our brand at TrustIn. You communicate clearly, deliver on time, and consistently provide high quality content and social media planning that has helped strengthen our online presence. I highly recommend your services to anyone looking for a reliable and talented designer.',
   },
