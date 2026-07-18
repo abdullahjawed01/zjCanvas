@@ -49,6 +49,7 @@ const REEL_ITEMS = [
   { src: 'public/reels/reel-10.mp4', label: 'A Day in the Life of a Doctor in Dubai' },
   { src: 'public/reels/reel-11.mp4', label: 'Doctors, Thinking About Dubai?' },
   { src: 'public/reels/reel-13.mp4', label: 'A Day in the Life at TrustIn' },
+  { src: 'public/reels/reel-14.mp4', label: 'Hafeez Tour and Travels' },
 ];
 
 // Each carousel component can hold N images — just add/remove entries in an
@@ -101,12 +102,12 @@ const TESTIMONIALS = [
     role: 'Marketing Lead',
     text: 'From the first brief to the final delivery, the process was smooth and genuinely collaborative. Every design came back polished, on-brand, and ready to publish — no back-and-forth needed. Our engagement on social media has visibly improved since we started working together.',
   },
-  {
-    initials: 'NR',
-    company: 'Nimbus Retail Co.',
-    name: 'Daniel Osei',
-    role: 'Founder',
-    text: 'Incredibly reliable and easy to work with. Deadlines were always met, revisions were quick, and the creative direction consistently exceeded what we asked for. It genuinely feels like having an in-house designer who understands the brand inside out.',
+ {
+    logo: 'public/testimonials/an-noor.jpg',
+    company: 'An Noor islamic academy',
+    name: 'Afroz Fatima jafri',
+    role: 'Client',
+    text: 'Working with her has been a great experience. She creates attractive and professional posters for our workshops. She is punctual in handling registrations, managing student groups, and ensuring our workshops run smoothly. She is reliable, creative, and always completes her work on time. I highly recommend her services.',
   },
 ];
 
