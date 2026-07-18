@@ -104,7 +104,7 @@ const TESTIMONIALS = [
   },
  {
     logo: 'public/testimonials/an-noor.jpg',
-    company: 'An Noor islamic academy',
+    company: 'An Noor Islamic Academy',
     name: 'Afroz Fatima jafri',
     role: 'Client',
     text: 'Working with her has been a great experience. She creates attractive and professional posters for our workshops. She is punctual in handling registrations, managing student groups, and ensuring our workshops run smoothly. She is reliable, creative, and always completes her work on time. I highly recommend her services.',
