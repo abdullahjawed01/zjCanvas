@@ -1,121 +1,8 @@
-// Shared data + small DOM helpers used by both the homepage (script.js)
-// and the "view all" gallery pages (gallery.js).
-
-const LOGO_ITEMS = [
-  { src: 'public/logos/logo-01.jpg', label: 'Enlightened' },
-  { src: 'public/logos/logo-02.jpg', label: 'Itz Review Time' },
-  { src: 'public/logos/logo-03.jpg', label: 'Untitled Design' },
-  { src: 'public/logos/logo-04.jpg', label: 'Abstract Green Healthy Life' },
-  { src: 'public/logos/logo-05.jpg', label: 'Ismail Multispeciality Clinic' },
-  { src: 'public/logos/logo-06.jpg', label: 'Ismail Multi-Speciality Clinic' },
-];
-
-const POSTER_ITEMS = [
-  { src: 'public/posters/poster-01.jpg', label: 'Zainab Work 01' },
-  { src: 'public/posters/poster-02.jpg', label: 'Zainab Work 02' },
-  { src: 'public/posters/poster-03.jpg', label: 'Trustin — Poster 27' },
-  { src: 'public/posters/poster-04.jpg', label: 'Trustin — Poster 22' },
-  { src: 'public/posters/poster-05.jpg', label: 'Trustin — Poster 26' },
-  { src: 'public/posters/poster-06.jpg', label: 'Your Word Shapes Your Kids’ World' },
-  { src: 'public/posters/poster-07.jpg', label: 'Trustin — Poster 23' },
-  { src: 'public/posters/poster-08.jpg', label: 'Zainab Work 03' },
-  { src: 'public/posters/poster-09.jpg', label: 'Parenting Workshop' },
-  { src: 'public/posters/poster-10.jpg', label: 'Wisdom of Words' },
-  { src: 'public/posters/poster-11.jpg', label: 'Dawrah Qur’an' },
-  { src: 'public/posters/poster-12.jpg', label: 'An Noor Islamic Academy' },
-  { src: 'public/posters/poster-13.jpg', label: 'Trustin — Poster 25' },
-  { src: 'public/posters/poster-14.jpg', label: 'Chocolate Workshop' },
-  { src: 'public/posters/poster-15.jpg', label: 'My Mental Health, My Responsibility' },
-  { src: 'public/posters/poster-16.jpg', label: 'Just Do It — Nike' },
-  { src: 'public/posters/poster-17.jpg', label: 'This Is Why Your Neck Hurts — OrthoCare' },
-  { src: 'public/posters/poster-18.jpg', label: 'Support to Strength — OrthoCare' },
-  { src: 'public/posters/poster-19.jpg', label: 'Why Doctors Choose First Clinic' },
-  { src: 'public/posters/poster-20.jpg', label: 'Start Your Clinic in 7 Days — First Clinic' },
-  { src: 'public/posters/poster-21.jpg', label: 'Discover a Healthier You — First Clinic' },
-  { src: 'public/posters/poster-22.jpg', label: 'Is Your Knee on Pause? — OrthoCare' },
-  { src: 'public/posters/poster-23.jpg', label: 'OrthoCare, Bengaluru' },
-  { src: 'public/posters/poster-24.jpg', label: 'Time for Qurbani — Adam’s Fresh Meat' },
-  { src: 'public/posters/poster-25.jpg', label: 'Don’t Let Injury Stop Your Game — OrthoCare' },
-  { src: 'public/posters/poster-26.jpg', label: 'Fresh Seafood, Pure Taste — Adam’s Fresh Meat' },
-  { src: 'public/posters/poster-27.jpg', label: 'Wisdom of Words — Part 02' },
-];
-
-const REEL_ITEMS = [
-  { src: 'public/reels/reel-01.mp4', label: 'AI Reel 01' },
-  { src: 'public/reels/reel-03.mp4', label: 'AI Reel 03' },
-  { src: 'public/reels/reel-04.mp4', label: 'AI Reel 04' },
-  { src: 'public/reels/reel-05.mp4', label: 'AI Reel 05' },
-  { src: 'public/reels/reel-07.mp4', label: 'Adam’s Fresh Meat — Heart of Quality' },
-  { src: 'public/reels/reel-10.mp4', label: 'A Day in the Life of a Doctor in Dubai' },
-  { src: 'public/reels/reel-11.mp4', label: 'Doctors, Thinking About Dubai?' },
-  { src: 'public/reels/reel-13.mp4', label: 'A Day in the Life at TrustIn' },
-  { src: 'public/reels/reel-14.mp4', label: 'Hafeez Tour and Travels' },
-];
-
-// Each carousel component can hold N images — just add/remove entries in an
-// item's `images` array. Entries that look like a path/URL render as <img>,
-// anything else renders as a labelled placeholder slide.
-const CAROUSEL_ITEMS = [
-  {
-    label: 'What Trustin Does That You Can’t Google',
-    images: [1, 2, 3, 4, 5, 6, 7, 8].map((n) => `public/carousel/what-trustin-does/${n}.jpg`),
-  },
-  {
-    label: 'From Eligibility to Practice',
-    images: [2, 3, 4].map((n) => `public/carousel/from-eligibility-to-practice/${n}.jpg`),
-  },
-  {
-    label: 'Carousel Showcase',
-    images: [2, 3, 4, 5, 6, 7, 8].map((n) => `public/carousel/carousel-showcase/${n}.jpg`),
-  },
-  {
-    label: 'Pink Gradients — Social Media & UX/UI Post',
-    images: [1, 2, 3, 4, 5, 6].map((n) => `public/carousel/pink-gradients/${n}.jpg`),
-  },
-];
-
-// Same component as CAROUSEL_ITEMS, reused for the Brochures row/page —
-// each entry is a multi-page brochure that auto-floats through its pages.
-const BROCHURE_ITEMS = [
-  {
-    label: 'TrustIn Brochure',
-    images: ['public/brochures/trustin-brochure/1-outside.jpg', 'public/brochures/trustin-brochure/2-inside.jpg'],
-  },
-  {
-    label: 'First Physio Brochure',
-    images: ['public/brochures/first-physio-brochure/1-outside.jpg', 'public/brochures/first-physio-brochure/2-inside.jpg'],
-  },
-];
-
-const TESTIMONIALS = [
-  {
-    logo: 'public/testimonials/trustin-consultancy.jpg',
-    company: 'TrustIn Consultancy',
-    name: 'Morsal Zamani',
-    role: 'Client',
-    text: 'Working with you has been an excellent experience. Your graphic design work is creative, professional, and always aligned with our brand at TrustIn. You communicate clearly, deliver on time, and consistently provide high quality content and social media planning that has helped strengthen our online presence. I highly recommend your services to anyone looking for a reliable and talented designer.',
-  },
-  {
-    initials: 'BP',
-    company: 'Bright Path Studio',
-    name: 'Alina Cortez',
-    role: 'Marketing Lead',
-    text: 'From the first brief to the final delivery, the process was smooth and genuinely collaborative. Every design came back polished, on-brand, and ready to publish — no back-and-forth needed. Our engagement on social media has visibly improved since we started working together.',
-  },
- {
-    logo: 'public/testimonials/an-noor.jpg',
-    company: 'An Noor Islamic Academy',
-    name: 'Afroz Fatima jafri',
-    role: 'Client',
-    text: 'Working with her has been a great experience. She creates attractive and professional posters for our workshops. She is punctual in handling registrations, managing student groups, and ensuring our workshops run smoothly. She is reliable, creative, and always completes her work on time. I highly recommend her services.',
-  },
-];
-
-const TOOLS = [
-  'Figma', 'Canva', 'Photoshop', 'Illustrator', 'Claude', 'Gemini',
-  'Google AI Studio', 'Google Labs', 'Higgsfield', 'ChatGPT',
-  'Midjourney', 'Firefly', 'After Effects', 'Premiere Pro', 'Notion',
-];
+// Small DOM helpers shared by the homepage (script.js) and the "view all"
+// gallery pages (gallery.js). The actual content — logos, posters, reels,
+// carousels, brochures, testimonials, tools, site settings — lives in
+// content-data.js, which is generated from content/data.json by the admin
+// server (/admin) and loaded via a <script> tag right before this file.
 
 function isImagePath(str) {
   return /^(https?:\/\/|\.{0,2}\/)/.test(str) || /\.(png|jpe?g|gif|webp|svg|avif)$/i.test(str);
@@ -207,9 +94,25 @@ function buildCarouselItemElement(item, extraClass, secondsPerImage = 5.5) {
   return slide;
 }
 
+// Applies SITE_SETTINGS (contact email + social links) to every matching
+// element on the page. content-data.js is loaded on every page, so editing
+// these once in the admin keeps every footer/contact link in sync.
+function applySiteSettings() {
+  if (typeof SITE_SETTINGS === 'undefined') return;
+  document.querySelectorAll('[data-contact-email]').forEach((el) => {
+    el.href = `mailto:${SITE_SETTINGS.contactEmail}`;
+    el.textContent = SITE_SETTINGS.contactEmail;
+  });
+  Object.entries(SITE_SETTINGS.socials || {}).forEach(([key, url]) => {
+    if (!url) return;
+    document.querySelectorAll(`[data-social="${key}"]`).forEach((el) => { el.href = url; });
+  });
+}
+
 // Shared navbar behaviour for every page: shrinks on scroll, and toggles
 // the mobile menu on small screens.
 function initNavbar() {
+  applySiteSettings();
   const navbar = document.getElementById('navbar');
   const onScroll = () => {
     navbar.classList.toggle('is-scrolled', window.scrollY > 24);

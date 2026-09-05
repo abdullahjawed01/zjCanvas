@@ -1,0 +1,23 @@
+{
+  "name": "zjcanvas-admin-server",
+  "version": "1.0.0",
+  "description": "Admin backend for zjCanvas — content editing API, uploads, and static site host.",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "private": true,
+  "type": "commonjs",
+  "dependencies": {
+    "express": "^5.2.1",
+    "express-session": "^1.19.0",
+    "multer": "^2.3.0"
+  }
+}

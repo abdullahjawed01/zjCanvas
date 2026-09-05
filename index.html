@@ -107,18 +107,18 @@
           <a href="#works" class="btn btn--gradient">View Works →</a>
           <a href="#contact" class="btn btn--glass">Contact Me</a>
         </div>
-        <div class="hero-stats">
+        <div class="hero-stats" id="heroStats">
           <div class="stat">
-            <div class="stat-num text-gradient">150+</div>
-            <div class="stat-label">Projects</div>
+            <div class="stat-num text-gradient" data-stat-num="0">150+</div>
+            <div class="stat-label" data-stat-label="0">Projects</div>
           </div>
           <div class="stat">
-            <div class="stat-num text-gradient">60+</div>
-            <div class="stat-label">Clients</div>
+            <div class="stat-num text-gradient" data-stat-num="1">60+</div>
+            <div class="stat-label" data-stat-label="1">Clients</div>
           </div>
           <div class="stat">
-            <div class="stat-num text-gradient">5+</div>
-            <div class="stat-label">Years Experience</div>
+            <div class="stat-num text-gradient" data-stat-num="2">5+</div>
+            <div class="stat-label" data-stat-label="2">Years Experience</div>
           </div>
         </div>
       </div>
@@ -187,14 +187,14 @@
           <span class="availability-dot"></span> Available for new projects
         </div>
         <div class="contact-links">
-          <a href="mailto:hello@zjcanvas.com" class="contact-email">hello@zjcanvas.com</a>
+          <a href="mailto:zjcanvas@gmail.com" class="contact-email" data-contact-email>zjcanvas@gmail.com</a>
           <span class="contact-location">Based in — Available worldwide</span>
         </div>
         <div class="socials">
-          <a href="https://www.instagram.com/zj.canvas/" class="social-pill" target="_blank" rel="noopener noreferrer">Instagram</a>
-          <a href="https://www.linkedin.com/in/zainab-jawed-a718a72aa/" class="social-pill" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-          <a href="https://www.facebook.com/profile.php?id=61591676378358" class="social-pill" target="_blank" rel="noopener noreferrer">Facebook</a>
-          <a href="https://x.com/zjcanvas" class="social-pill" target="_blank" rel="noopener noreferrer">Twitter</a>
+          <a href="https://www.instagram.com/zj.canvas/" class="social-pill" data-social="instagram" target="_blank" rel="noopener noreferrer">Instagram</a>
+          <a href="https://www.linkedin.com/in/zainab-jawed-a718a72aa/" class="social-pill" data-social="linkedin" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+          <a href="https://www.facebook.com/profile.php?id=61591676378358" class="social-pill" data-social="facebook" target="_blank" rel="noopener noreferrer">Facebook</a>
+          <a href="https://x.com/zjcanvas" class="social-pill" data-social="twitter" target="_blank" rel="noopener noreferrer">Twitter</a>
         </div>
       </div>
 
@@ -230,10 +230,10 @@
     <a href="#contact">Contact</a>
   </nav>
   <div class="footer-socials">
-    <a href="https://www.instagram.com/zj.canvas/" aria-label="Instagram" target="_blank" rel="noopener noreferrer">IG</a>
-    <a href="https://www.linkedin.com/in/zainab-jawed-a718a72aa/" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">IN</a>
-    <a href="https://x.com/zjcanvas" aria-label="Twitter" target="_blank" rel="noopener noreferrer">TW</a>
-    <a href="https://www.facebook.com/profile.php?id=61591676378358" aria-label="Facebook" target="_blank" rel="noopener noreferrer">F</a>
+    <a href="https://www.instagram.com/zj.canvas/" data-social="instagram" aria-label="Instagram" target="_blank" rel="noopener noreferrer">IG</a>
+    <a href="https://www.linkedin.com/in/zainab-jawed-a718a72aa/" data-social="linkedin" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">IN</a>
+    <a href="https://x.com/zjcanvas" data-social="twitter" aria-label="Twitter" target="_blank" rel="noopener noreferrer">TW</a>
+    <a href="https://www.facebook.com/profile.php?id=61591676378358" data-social="facebook" aria-label="Facebook" target="_blank" rel="noopener noreferrer">F</a>
   </div>
   <div class="footer-bottom">
     <span>© 2026 Zainab Jawed — zjCanvas</span>
@@ -241,6 +241,7 @@
   </div>
 </footer>
 
+<script src="content-data.js"></script>
 <script src="data.js"></script>
 <script src="script.js"></script>
 </body>

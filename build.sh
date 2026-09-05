@@ -4,6 +4,10 @@
 # ZJCANVAS PRODUCTION DEPLOYMENT SCRIPT
 # Domain: zjcanvas.com / www.zjcanvas.com
 # Usage: sudo ./build.sh
+#
+# Deploys the static site AND the admin backend (Node/Express, at /admin) that
+# powers content editing. Nginx serves static files directly and reverse
+# proxies /admin and /api/ to the Node process, which systemd keeps running.
 # ==============================================================================
 
 set -euo pipefail
@@ -15,6 +19,10 @@ DOMAIN="zjcanvas.com"
 WWW_DOMAIN="www.zjcanvas.com"
 WEB_ROOT="/var/www/zjcanvas.com"
 CERTBOT_EMAIL="your-email@example.com" # Required for Let's Encrypt SSL
+ADMIN_PORT="3000"                      # Internal port the Node admin server listens on
+# Optional: export ADMIN_PASSWORD=... before running to set the initial admin
+# password yourself. Otherwise one is generated and printed at the end of
+# this script (only on first install — it is never shown again).
 
 # ------------------------------------------------------------------------------
 # HELPER FUNCTIONS
@@ -37,9 +45,9 @@ log_error() {
 }
 
 # ------------------------------------------------------------------------------
-# [1/10] CHECK SYSTEM & ROOT PRIVILEGES
+# [1/13] CHECK SYSTEM & ROOT PRIVILEGES
 # ------------------------------------------------------------------------------
-log_step "[1/10] Checking system and root privileges..."
+log_step "[1/13] Checking system and root privileges..."
 
 if [ "$(id -u)" -ne 0 ]; then
     log_error "This script must be run as root or with sudo."
@@ -47,7 +55,6 @@ if [ "$(id -u)" -ne 0 ]; then
     exit 1
 fi
 
-# Detect Package Manager (Debian/Ubuntu expected for standard VPS)
 if command -v apt-get >/dev/null 2>&1; then
     PKG_MANAGER="apt-get"
 else
@@ -56,9 +63,9 @@ else
 fi
 
 # ------------------------------------------------------------------------------
-# [2/10] CHECK CONFIGURATION VARIABLES
+# [2/13] CHECK CONFIGURATION VARIABLES
 # ------------------------------------------------------------------------------
-log_step "[2/10] Validating configuration variables..."
+log_step "[2/13] Validating configuration variables..."
 
 if [ -z "$CERTBOT_EMAIL" ] || [ "$CERTBOT_EMAIL" = "your-email@example.com" ]; then
     log_error "CERTBOT_EMAIL is not configured."
@@ -71,11 +78,12 @@ echo "  Domain: $DOMAIN"
 echo "  WWW Domain: $WWW_DOMAIN"
 echo "  Web Root: $WEB_ROOT"
 echo "  Certbot Email: $CERTBOT_EMAIL"
+echo "  Admin server port (internal): $ADMIN_PORT"
 
 # ------------------------------------------------------------------------------
-# [3/10] CHECK & INSTALL DEPENDENCIES
+# [3/13] CHECK & INSTALL DEPENDENCIES
 # ------------------------------------------------------------------------------
-log_step "[3/10] Checking and installing dependencies (Nginx & Certbot)..."
+log_step "[3/13] Checking and installing dependencies (Nginx, Certbot, Node.js, ffmpeg)..."
 
 export DEBIAN_FRONTEND=noninteractive
 
@@ -91,25 +99,47 @@ if ! command -v certbot >/dev/null 2>&1 || ! dpkg -l | grep -q python3-certbot-n
     $PKG_MANAGER install -y -qq certbot python3-certbot-nginx
 fi
 
-log_success "Nginx and Certbot are installed and ready."
+NODE_OK=0
+if command -v node >/dev/null 2>&1; then
+    NODE_MAJOR="$(node -v | sed 's/^v//' | cut -d. -f1)"
+    if [ "$NODE_MAJOR" -ge 18 ] 2>/dev/null; then
+        NODE_OK=1
+    fi
+fi
+if [ "$NODE_OK" -eq 0 ]; then
+    echo "Installing Node.js 20.x LTS (via NodeSource, needed for the admin server)..."
+    curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
+    $PKG_MANAGER install -y -qq nodejs
+fi
+
+if ! command -v ffmpeg >/dev/null 2>&1; then
+    echo "Installing ffmpeg (used to generate reel poster thumbnails)..."
+    $PKG_MANAGER install -y -qq ffmpeg
+fi
+
+NODE_BIN="$(command -v node)"
+log_success "Nginx, Certbot, Node.js ($(node -v)) and ffmpeg are installed and ready."
 
 # ------------------------------------------------------------------------------
-# [4/10] PREPARE WEB ROOT DIRECTORY
+# [4/13] PREPARE WEB ROOT DIRECTORY
 # ------------------------------------------------------------------------------
-log_step "[4/10] Preparing deployment directory at $WEB_ROOT..."
+log_step "[4/13] Preparing deployment directory at $WEB_ROOT..."
 
 mkdir -p "$WEB_ROOT"
+FRESH_ADMIN_SETUP=0
+if [ ! -f "$WEB_ROOT/server/.env" ]; then
+    FRESH_ADMIN_SETUP=1
+fi
 
 # ------------------------------------------------------------------------------
-# [5/10] COPY WEBSITE ASSETS
+# [5/13] DEPLOY WEBSITE FILES
 # ------------------------------------------------------------------------------
-log_step "[5/10] Deploying website files to production directory..."
+log_step "[5/13] Deploying website files to production directory..."
 
-# Determine script source directory
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-# Target sync list
-FILES_TO_SYNC=(
+# Code — always overwritten on every redeploy.
+CODE_ITEMS=(
     "index.html"
     "Brochures.html"
     "Carousel.html"
@@ -128,10 +158,18 @@ FILES_TO_SYNC=(
     "data.js"
     "script.js"
     "gallery.js"
-    "public"
+    "server"
 )
 
-for item in "${FILES_TO_SYNC[@]}"; do
+# Content — only copied the first time. Once live, this is edited through
+# /admin (uploads + content/data.json), so a redeploy must never overwrite it.
+CONTENT_ITEMS=(
+    "public"
+    "content"
+    "content-data.js"
+)
+
+for item in "${CODE_ITEMS[@]}"; do
     if [ -e "$SCRIPT_DIR/$item" ]; then
         cp -r "$SCRIPT_DIR/$item" "$WEB_ROOT/"
     else
@@ -139,14 +177,21 @@ for item in "${FILES_TO_SYNC[@]}"; do
     fi
 done
 
+for item in "${CONTENT_ITEMS[@]}"; do
+    if [ -e "$WEB_ROOT/$item" ]; then
+        log_warning "$item already exists in $WEB_ROOT — leaving it untouched (admin-edited content persists across redeploys)."
+    elif [ -e "$SCRIPT_DIR/$item" ]; then
+        cp -r "$SCRIPT_DIR/$item" "$WEB_ROOT/"
+    fi
+done
+
 log_success "Website files copied to $WEB_ROOT."
 
 # ------------------------------------------------------------------------------
-# [6/10] SET FILE PERMISSIONS & OWNERSHIP
+# [6/13] SET FILE PERMISSIONS & OWNERSHIP
 # ------------------------------------------------------------------------------
-log_step "[6/10] Setting secure ownership and file permissions..."
+log_step "[6/13] Setting secure ownership and file permissions..."
 
-# Default Nginx user on Debian/Ubuntu is www-data
 NGINX_USER="www-data"
 if id "www-data" >/dev/null 2>&1; then
     chown -R www-data:www-data "$WEB_ROOT"
@@ -161,9 +206,69 @@ find "$WEB_ROOT" -type f -exec chmod 644 {} +
 log_success "Permissions set to 755 (directories) and 644 (files)."
 
 # ------------------------------------------------------------------------------
-# [7/10] GENERATE NGINX CONFIGURATION
+# [7/13] INSTALL ADMIN SERVER DEPENDENCIES
 # ------------------------------------------------------------------------------
-log_step "[7/10] Creating optimized Nginx server configuration..."
+log_step "[7/13] Installing admin server dependencies..."
+
+if [ -f "$WEB_ROOT/server/package.json" ]; then
+    (cd "$WEB_ROOT/server" && npm install --omit=dev --no-audit --no-fund)
+    log_success "Node dependencies installed."
+else
+    log_error "server/package.json not found — admin backend will not run."
+    exit 1
+fi
+
+GENERATED_PASSWORD=""
+if [ "$FRESH_ADMIN_SETUP" -eq 1 ]; then
+    echo "First-time setup: initializing server/.env..."
+    if [ -n "${ADMIN_PASSWORD:-}" ]; then
+        GENERATED_PASSWORD="$ADMIN_PASSWORD"
+    else
+        GENERATED_PASSWORD="$(node -e "const c=require('crypto');const s='ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789';const b=c.randomBytes(14);process.stdout.write([...b].map(x=>s[x%s.length]).join(''));")"
+    fi
+    {
+        echo "NODE_ENV=production"
+        echo "PORT=$ADMIN_PORT"
+        echo "ADMIN_PASSWORD=$GENERATED_PASSWORD"
+    } > "$WEB_ROOT/server/.env"
+    chown "$NGINX_USER:$NGINX_USER" "$WEB_ROOT/server/.env"
+    chmod 600 "$WEB_ROOT/server/.env"
+fi
+
+chown -R "$NGINX_USER:$NGINX_USER" "$WEB_ROOT/server/node_modules" 2>/dev/null || true
+
+# ------------------------------------------------------------------------------
+# [8/13] CREATE / UPDATE SYSTEMD SERVICE FOR THE ADMIN SERVER
+# ------------------------------------------------------------------------------
+log_step "[8/13] Configuring the zjcanvas-admin systemd service..."
+
+cat <<EOF > /etc/systemd/system/zjcanvas-admin.service
+[Unit]
+Description=zjCanvas Admin Server (content API + uploads)
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=$WEB_ROOT/server
+ExecStart=$NODE_BIN $WEB_ROOT/server/index.js
+EnvironmentFile=$WEB_ROOT/server/.env
+Restart=always
+RestartSec=3
+User=$NGINX_USER
+Group=$NGINX_USER
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+systemctl daemon-reload
+log_success "systemd unit written to /etc/systemd/system/zjcanvas-admin.service."
+
+# ------------------------------------------------------------------------------
+# [9/13] GENERATE NGINX CONFIGURATION
+# ------------------------------------------------------------------------------
+log_step "[9/13] Creating optimized Nginx server configuration..."
 
 NGINX_CONF_PATH="/etc/nginx/sites-available/$DOMAIN"
 NGINX_LINK_PATH="/etc/nginx/sites-enabled/$DOMAIN"
@@ -179,6 +284,9 @@ server {
 
     root $WEB_ROOT;
     index index.html;
+
+    # Reel uploads through /admin can be large.
+    client_max_body_size 130M;
 
     # Gzip Compression
     gzip on;
@@ -198,15 +306,49 @@ server {
     add_header Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=()" always;
     add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; media-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com data:; connect-src 'self'; frame-ancestors 'self';" always;
 
+    # Never serve server internals, the raw content store, or dotfiles
+    # (including server/.env) directly.
+    location ~ ^/(server|content)(/|\$) { deny all; return 404; }
+    location ~ /\. { deny all; return 404; }
+
+    # content-data.js is regenerated every time something is saved in
+    # /admin — never let the 30-day JS cache rule below serve a stale copy.
+    location = /content-data.js {
+        add_header Cache-Control "no-cache";
+        try_files /content-data.js =404;
+    }
+
+    # Admin UI + JSON API — proxied to the Node service kept running by
+    # systemd (zjcanvas-admin.service). The ^~ modifier makes sure these
+    # win over the generic .css/.js cache rule below for e.g. /admin/admin.js.
+    location ^~ /admin {
+        proxy_pass http://127.0.0.1:$ADMIN_PORT;
+        proxy_http_version 1.1;
+        proxy_set_header Host \$host;
+        proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto \$scheme;
+    }
+
+    location ^~ /api/ {
+        proxy_pass http://127.0.0.1:$ADMIN_PORT;
+        proxy_http_version 1.1;
+        proxy_set_header Host \$host;
+        proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto \$scheme;
+        proxy_read_timeout 120s;
+    }
+
     # Static Assets Caching (1 year for immutable media)
-    location ~* \.(?:jpg|jpeg|gif|png|ico|cur|gz|svg|svgz|mp4|ogg|ogv|webm|htc|woff|woff2|ttf|eot)$ {
+    location ~* \.(?:jpg|jpeg|gif|png|ico|cur|gz|svg|svgz|mp4|ogg|ogv|webm|htc|woff|woff2|ttf|eot)\$ {
         expires 1y;
         access_log off;
         add_header Cache-Control "public, no-transform";
     }
 
     # CSS and JavaScript Caching (30 days)
-    location ~* \.(?:css|js)$ {
+    location ~* \.(?:css|js)\$ {
         expires 30d;
         access_log off;
         add_header Cache-Control "public, no-transform";
@@ -225,7 +367,6 @@ server {
 }
 EOF
 
-# Enable site and remove default config if present
 mkdir -p /etc/nginx/sites-enabled
 ln -sf "$NGINX_CONF_PATH" "$NGINX_LINK_PATH"
 
@@ -236,11 +377,10 @@ fi
 log_success "Nginx configuration generated at $NGINX_CONF_PATH."
 
 # ------------------------------------------------------------------------------
-# [8/10] SSL / HTTPS CONFIGURATION WITH CERTBOT
+# [10/13] SSL / HTTPS CONFIGURATION WITH CERTBOT
 # ------------------------------------------------------------------------------
-log_step "[8/10] Configuring HTTPS & SSL certificates with Certbot..."
+log_step "[10/13] Configuring HTTPS & SSL certificates with Certbot..."
 
-# Check if DNS resolves to local system IP before attempting SSL
 IS_DNS_READY=0
 if host "$DOMAIN" >/dev/null 2>&1; then
     IS_DNS_READY=1
@@ -263,15 +403,14 @@ else
     fi
 fi
 
-# Ensure Certbot timer or cron renewal is active
 if systemctl is-enabled certbot.timer >/dev/null 2>&1; then
     log_success "Certbot auto-renewal timer is enabled."
 fi
 
 # ------------------------------------------------------------------------------
-# [9/10] TEST NGINX CONFIGURATION & RELOAD
+# [11/13] TEST NGINX CONFIGURATION & RELOAD
 # ------------------------------------------------------------------------------
-log_step "[9/10] Testing Nginx configuration syntax and reloading..."
+log_step "[11/13] Testing Nginx configuration syntax and reloading..."
 
 nginx -t
 
@@ -284,17 +423,39 @@ fi
 log_success "Nginx service is active and reloaded."
 
 # ------------------------------------------------------------------------------
-# [10/10] HEALTH CHECKS & SUMMARY
+# [12/13] START / ENABLE THE ADMIN SERVICE
 # ------------------------------------------------------------------------------
-log_step "[10/10] Running post-deployment health checks..."
+log_step "[12/13] Starting the zjcanvas-admin service..."
+
+systemctl enable zjcanvas-admin >/dev/null 2>&1 || true
+systemctl restart zjcanvas-admin
+sleep 1
+
+if systemctl is-active --quiet zjcanvas-admin; then
+    log_success "zjcanvas-admin is running (proxied at /admin and /api/)."
+else
+    log_error "zjcanvas-admin failed to start. Check: journalctl -u zjcanvas-admin -n 50"
+fi
+
+# ------------------------------------------------------------------------------
+# [13/13] HEALTH CHECKS & SUMMARY
+# ------------------------------------------------------------------------------
+log_step "[13/13] Running post-deployment health checks..."
 
 echo -n "Checking local web server response (HTTP 200/301)... "
 HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost/ || true)
-
 if [ "$HTTP_STATUS" = "200" ] || [ "$HTTP_STATUS" = "301" ]; then
     log_success "Local HTTP server returned status code: $HTTP_STATUS"
 else
     log_warning "Local HTTP server returned unexpected status code: $HTTP_STATUS"
+fi
+
+echo -n "Checking admin proxy response (HTTP 200)... "
+ADMIN_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "http://localhost/api/admin/me" || true)
+if [ "$ADMIN_STATUS" = "200" ]; then
+    log_success "Admin API responded: $ADMIN_STATUS"
+else
+    log_warning "Admin API returned unexpected status code: $ADMIN_STATUS (check journalctl -u zjcanvas-admin)"
 fi
 
 echo ""
@@ -305,6 +466,13 @@ echo " Website Web Root: $WEB_ROOT"
 echo " Active Domain:    https://$DOMAIN"
 echo " WWW Domain:       https://$WWW_DOMAIN"
 echo " Nginx Status:     $(systemctl is-active nginx)"
+echo " Admin Status:     $(systemctl is-active zjcanvas-admin)"
+echo " Admin URL:        https://$DOMAIN/admin"
+if [ -n "$GENERATED_PASSWORD" ]; then
+echo ""
+echo " Admin password (shown once — save it now):"
+echo "   $GENERATED_PASSWORD"
+echo " Change it any time from the Settings tab inside /admin."
+fi
 echo "=========================================================================="
 echo ""
-EOF

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>zjCanvas Admin</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+<div id="loginView" class="login-view">
+  <form id="loginForm" class="login-card">
+    <div class="login-logo">zj<span class="accent">Canvas</span></div>
+    <div class="login-tag">Admin</div>
+    <label class="field">
+      <span>Password</span>
+      <input type="password" id="loginPassword" required autocomplete="current-password" autocapitalize="off" autocorrect="off" spellcheck="false">
+    </label>
+    <button type="submit" class="btn btn-primary btn-block">Log in</button>
+    <p class="form-error" id="loginError" hidden></p>
+  </form>
+</div>
+
+<div id="appView" class="app-view" hidden>
+  <aside class="sidebar">
+    <div class="sidebar-brand">zj<span class="accent">Canvas</span></div>
+    <nav class="sidebar-nav">
+      <button class="nav-btn is-active" data-tab="settings">Settings</button>
+      <button class="nav-btn" data-tab="reels">Reels</button>
+      <button class="nav-btn" data-tab="posters">Posters</button>
+      <button class="nav-btn" data-tab="logos">Logos</button>
+      <button class="nav-btn" data-tab="carousels">Carousels</button>
+      <button class="nav-btn" data-tab="brochures">Brochures</button>
+      <button class="nav-btn" data-tab="testimonials">Testimonials</button>
+      <button class="nav-btn" data-tab="tools">Tools</button>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="/" target="_blank" rel="noopener" class="ghost-link">View live site ↗</a>
+      <button id="logoutBtn" class="ghost-link">Log out</button>
+    </div>
+  </aside>
+
+  <main class="content">
+    <div id="toast" class="toast" hidden></div>
+
+    <section class="panel" id="panel-settings" data-panel="settings">
+      <h1>Site Settings</h1>
+      <form id="settingsForm" class="card-form">
+        <label class="field">
+          <span>Contact email</span>
+          <input type="email" name="contactEmail" required>
+        </label>
+        <div class="field-grid">
+          <label class="field"><span>Instagram URL</span><input type="url" name="instagram"></label>
+          <label class="field"><span>LinkedIn URL</span><input type="url" name="linkedin"></label>
+          <label class="field"><span>Facebook URL</span><input type="url" name="facebook"></label>
+          <label class="field"><span>Twitter / X URL</span><input type="url" name="twitter"></label>
+        </div>
+        <h2>Hero Stats</h2>
+        <div class="field-grid field-grid--3" id="statsFields"></div>
+        <button type="submit" class="btn btn-primary">Save Settings</button>
+      </form>
+
+      <h2>Change Password</h2>
+      <form id="passwordForm" class="card-form">
+        <div class="field-grid">
+          <label class="field"><span>Current password</span><input type="password" name="currentPassword" required autocomplete="current-password"></label>
+          <label class="field"><span>New password</span><input type="password" name="newPassword" required minlength="8" autocomplete="new-password"></label>
+        </div>
+        <button type="submit" class="btn btn-secondary">Update Password</button>
+      </form>
+    </section>
+
+    <section class="panel" id="panel-reels" data-panel="reels" hidden>
+      <div class="panel-head"><h1>Reels</h1><p>Videos autoplay in the homepage marquee and gallery. A poster thumbnail is generated automatically.</p></div>
+      <form class="upload-form" data-media="reels">
+        <input type="file" name="file" accept="video/mp4,video/webm,video/quicktime" required>
+        <input type="text" name="label" placeholder="Label" required>
+        <button type="submit" class="btn btn-primary">Add Reel</button>
+      </form>
+      <div class="media-grid" id="grid-reels"></div>
+    </section>
+
+    <section class="panel" id="panel-posters" data-panel="posters" hidden>
+      <div class="panel-head"><h1>Posters</h1></div>
+      <form class="upload-form" data-media="posters">
+        <input type="file" name="file" accept="image/*" required>
+        <input type="text" name="label" placeholder="Label" required>
+        <button type="submit" class="btn btn-primary">Add Poster</button>
+      </form>
+      <div class="media-grid" id="grid-posters"></div>
+    </section>
+
+    <section class="panel" id="panel-logos" data-panel="logos" hidden>
+      <div class="panel-head"><h1>Logos</h1></div>
+      <form class="upload-form" data-media="logos">
+        <input type="file" name="file" accept="image/*" required>
+        <input type="text" name="label" placeholder="Label" required>
+        <button type="submit" class="btn btn-primary">Add Logo</button>
+      </form>
+      <div class="media-grid" id="grid-logos"></div>
+    </section>
+
+    <section class="panel" id="panel-carousels" data-panel="carousels" hidden>
+      <div class="panel-head"><h1>Carousels</h1><p>Each carousel is a set of slides that scroll on their own. Add the group first, then upload its pages in order.</p></div>
+      <form class="gallery-add-form" data-gallery="carousels">
+        <input type="text" name="label" placeholder="New carousel label" required>
+        <button type="submit" class="btn btn-primary">Add Carousel</button>
+      </form>
+      <div class="gallery-list" id="grid-carousels"></div>
+    </section>
+
+    <section class="panel" id="panel-brochures" data-panel="brochures" hidden>
+      <div class="panel-head"><h1>Brochures</h1><p>Same idea as carousels — add the brochure, then upload its pages in order.</p></div>
+      <form class="gallery-add-form" data-gallery="brochures">
+        <input type="text" name="label" placeholder="New brochure label" required>
+        <button type="submit" class="btn btn-primary">Add Brochure</button>
+      </form>
+      <div class="gallery-list" id="grid-brochures"></div>
+    </section>
+
+    <section class="panel" id="panel-testimonials" data-panel="testimonials" hidden>
+      <div class="panel-head"><h1>Testimonials</h1></div>
+      <form class="testimonial-form" id="testimonialAddForm">
+        <div class="field-grid">
+          <input type="text" name="company" placeholder="Company" required>
+          <input type="text" name="name" placeholder="Person name" required>
+          <input type="text" name="role" placeholder="Role">
+        </div>
+        <textarea name="text" placeholder="Testimonial text" rows="3" required></textarea>
+        <div class="field-grid">
+          <input type="text" name="initials" placeholder="Initials (used only if no logo)" maxlength="3">
+          <input type="file" name="logo" accept="image/*">
+        </div>
+        <button type="submit" class="btn btn-primary">Add Testimonial</button>
+      </form>
+      <div class="testimonial-list" id="grid-testimonials"></div>
+    </section>
+
+    <section class="panel" id="panel-tools" data-panel="tools" hidden>
+      <div class="panel-head"><h1>Tools</h1></div>
+      <form class="tool-add-form" id="toolAddForm">
+        <input type="text" name="value" placeholder="Tool name" required>
+        <button type="submit" class="btn btn-primary">Add Tool</button>
+      </form>
+      <div class="tool-list" id="grid-tools"></div>
+    </section>
+  </main>
+</div>
+
+<script src="admin.js"></script>
+</body>
+</html>

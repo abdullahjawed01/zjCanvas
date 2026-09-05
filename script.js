@@ -75,27 +75,59 @@ function buildWorkRows() {
   });
 }
 
+// Testimonial fields are editable from /admin, so they're untrusted text —
+// built with createElement/textContent rather than innerHTML to rule out
+// stored XSS from a pasted-in company name or quote.
 function buildTestimonials() {
   const container = document.getElementById('testimonialsGrid');
   TESTIMONIALS.forEach((t) => {
     const card = document.createElement('div');
     card.className = 'testimonial-card';
 
-    const logo = t.logo
-      ? `<img src="${t.logo}" alt="${t.company} logo" class="testimonial-logo">`
-      : `<div class="testimonial-logo testimonial-logo--initials">${t.initials}</div>`;
+    const head = document.createElement('div');
+    head.className = 'testimonial-head';
 
-    card.innerHTML = `
-      <div class="testimonial-head">
-        ${logo}
-        <div class="testimonial-company">
-          <div class="testimonial-company-name">${t.company}</div>
-          <div class="testimonial-person">${t.name}${t.role ? ` · ${t.role}` : ''}</div>
-        </div>
-      </div>
-      <p class="testimonial-text">“${t.text}”</p>
-    `;
+    if (t.logo) {
+      const img = document.createElement('img');
+      img.src = t.logo;
+      img.alt = `${t.company} logo`;
+      img.className = 'testimonial-logo';
+      head.appendChild(img);
+    } else {
+      const initials = document.createElement('div');
+      initials.className = 'testimonial-logo testimonial-logo--initials';
+      initials.textContent = t.initials || '';
+      head.appendChild(initials);
+    }
+
+    const companyWrap = document.createElement('div');
+    companyWrap.className = 'testimonial-company';
+    const companyName = document.createElement('div');
+    companyName.className = 'testimonial-company-name';
+    companyName.textContent = t.company;
+    const person = document.createElement('div');
+    person.className = 'testimonial-person';
+    person.textContent = t.role ? `${t.name} · ${t.role}` : t.name;
+    companyWrap.appendChild(companyName);
+    companyWrap.appendChild(person);
+    head.appendChild(companyWrap);
+
+    const text = document.createElement('p');
+    text.className = 'testimonial-text';
+    text.textContent = `“${t.text}”`;
+
+    card.appendChild(head);
+    card.appendChild(text);
     container.appendChild(card);
+  });
+}
+
+function applyHeroStats() {
+  (SITE_SETTINGS.stats || []).forEach((stat, i) => {
+    const numEl = document.querySelector(`[data-stat-num="${i}"]`);
+    const labelEl = document.querySelector(`[data-stat-label="${i}"]`);
+    if (numEl) numEl.textContent = stat.num;
+    if (labelEl) labelEl.textContent = stat.label;
   });
 }
 
@@ -105,7 +137,10 @@ function buildToolsMarquee() {
   doubled.forEach((tool) => {
     const chip = document.createElement('span');
     chip.className = 'tool-chip';
-    chip.innerHTML = `<span class="tool-dot"></span>${tool}`;
+    const dot = document.createElement('span');
+    dot.className = 'tool-dot';
+    chip.appendChild(dot);
+    chip.appendChild(document.createTextNode(tool));
     track.appendChild(chip);
   });
 }
@@ -156,7 +191,7 @@ function initContactForm() {
     const subject = encodeURIComponent(`Project enquiry from ${name}`);
     const body = encodeURIComponent(`${message}\n\n— ${name} (${email})`);
     submitBtn.textContent = 'Opening your mail…';
-    window.location.href = `mailto:hello@zjcanvas.com?subject=${subject}&body=${body}`;
+    window.location.href = `mailto:${SITE_SETTINGS.contactEmail}?subject=${subject}&body=${body}`;
   });
 }
 
@@ -164,6 +199,7 @@ document.addEventListener('DOMContentLoaded', () => {
   buildWorkRows();
   buildTestimonials();
   buildToolsMarquee();
+  applyHeroStats();
   initNavbar();
   initHeroTilt();
   initContactForm();
