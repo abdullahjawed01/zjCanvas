@@ -387,7 +387,18 @@ if host "$DOMAIN" >/dev/null 2>&1; then
 fi
 
 if [ -d "/etc/letsencrypt/live/$DOMAIN" ]; then
-    log_success "SSL certificates already exist for $DOMAIN."
+    # Certificate already exists (from a previous run) — but the nginx
+    # config for $DOMAIN was just fully regenerated from scratch in step
+    # [9/13] and is HTTP-only again. Re-run just the installer (no
+    # reissuance) so the HTTPS server block and redirect always get
+    # reapplied on every deploy, not only the first one.
+    echo "SSL certificate already exists for $DOMAIN — reapplying nginx HTTPS config..."
+    if certbot install --nginx --cert-name "$DOMAIN" --non-interactive; then
+        log_success "HTTPS server block reapplied for $DOMAIN."
+    else
+        log_warning "Could not reapply the existing certificate to nginx. Run manually:"
+        log_warning "  sudo certbot install --nginx --cert-name $DOMAIN"
+    fi
 else
     if [ "$IS_DNS_READY" -eq 1 ]; then
         echo "Obtaining SSL certificate from Let's Encrypt..."
